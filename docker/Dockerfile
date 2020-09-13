@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 
-RUN groupadd -r airflow && useradd -r -g airflow airflow -u 1000
+RUN groupadd -r airflow -g 1500 && useradd -r -g airflow airflow -u 2000
 RUN apt-get update -y
 
 RUN apt-get install -y \
