@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This template creates an Amazon EFS file system and access point to be 
+             used by  Kubernetes Cluster to share the DAG description files
+Resources:
+  AirflowFileSystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      ThroughputMode: provisioned
+      ProvisionedThroughputInMibps: 10
+      PerformanceMode: generalPurpose
+      LifecyclePolicies:
+        - TransitionToIA: AFTER_14_DAYS
+      FileSystemPolicy:
+        Version: "2012-10-17"
+        Id: AirflowFileSystemPolicy
+        Statement:
+          - Sid: AirflowFSPolicyStatemenet
+            Effect: Allow
+            Principal: 
+              Service:
+                - ecs-tasks.amazonaws.com
+                - ecs.amazonaws.com
+                - eks.amazonaws.com
+                - lambda.amazonaws.com
+            Action:
+              - elasticfilesystem:ClientRootAccess
+              - elasticfilesystem:ClientMount
+              - elasticfilesystem:ClientWrite
+  
+  AirflowAccessPoint:
+    Type: AWS::EFS::AccessPoint
+    Properties:
+      FileSystemId: !Ref AirflowFileSystem
+      PosixUser:
+        Gid: 1500 # taken from the docker image for creating our own airflow image
+        Uid: 2000 # taken from the docker image for creating our own airflow image
+      
+      
