@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airflow-webserver-deployment
+  labels:
+    app: airflow-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airflow-webserver
+  template:
+    metadata:
+      labels:
+        app: airflow-webserver
+    spec:
+      containers:
+      - name: airflow-webserver
+        image: airflow_image
+        imagePullPolicy: Never
+        command:
+            - airflow
+            - webserver
+        envFrom:
+            - configMapRef: 
+                name: airflow-config-map

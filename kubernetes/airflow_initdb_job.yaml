@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: airflow-initdb
+spec:
+  template:
+    spec:
+      containers:
+      - name: airflow-initdb
+        image: airflow_image:latest
+        command: ["airflow",  "initdb"]
+        imagePullPolicy: Never
+        envFrom:
+            - configMapRef:
+                name: airflow-config-map
+      restartPolicy: Never
+  backoffLimit: 1

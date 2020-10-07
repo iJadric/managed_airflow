@@ -10,7 +10,7 @@ RUN apt-get install -y \
 
 
 ENV AIRFLOW_HOME /opt/airflow 
-RUN mkdir /opt/airflow && pip3 install psycopg2-binary && pip3 install apache-airflow[aws,kubernetes,postgres] 
+RUN mkdir -p /opt/airflow/dags && pip3 install psycopg2-binary && pip3 install apache-airflow && pip3 install apache-airflow[aws,kubernetes,postgres] 
 RUN chown -R airflow /opt/airflow
 USER airflow
 CMD echo "helloworld"

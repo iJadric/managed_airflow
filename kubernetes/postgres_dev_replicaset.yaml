@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+    tier: postgres
+spec:
+  # modify replicas according to your case
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: postgres
+      app: postgres
+  template:
+    metadata:
+      labels:
+        tier: postgres
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        envFrom:
+          - configMapRef:
+              name: postgres-config-demo
+        ports:
+        - containerPort: 5432
+          name: postgredb

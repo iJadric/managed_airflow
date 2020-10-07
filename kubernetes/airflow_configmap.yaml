@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: airflow-config-map
+  labels:
+    app: airflow
+data:
+  AIRFLOW__CORE__EXECUTOR: KubernetesExecutor
+  AIRFLOW__CORE__SQL_ALCHEMY_CONN: 'postgresql+psycopg2://admin:password@postgres-service:5432/postgres'
+  AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+  AIRFLOW__KUBERNETES__DAGS_VOLUME_MOUNT_POINT: /opt/airflow/dags
+  AIRFLOW__KUBERNETES__DAGS_VOLUME_HOST: /Users/ivan/airflow/dags
+  AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: airflow_image
+  AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: latest
+  AIRFLOW__KUBERNETES__WORKER_CONTAINER_IMAGE_PULL_POLICY: Never
+  AIRFLOW__CORE__PARALLELISM: "1"
+  AIRFLOW__SCHEDULER__MAX_THREADS: "1"
+  AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
